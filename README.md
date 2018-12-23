@@ -3,8 +3,11 @@
 Screen Display Simulator written in VHDL and JS. Generates RGB pixel data from VHDL simulation and displays the pixels on the browser. Currently only supports 720p resolution (1280x720). 
 
 Written for FPGA class to quickly tinker with object buffer to pass to HDMI.
+Example output for `pattern_generator.vhd` and `objectbuffer.vhd` are shown below.
 
-## Procedure 
+![pattern gen](img/pattern.png) ![object buffer](img/objbuf.png)
+
+## Procedure
 
 ### Using ISIM
 
@@ -13,6 +16,8 @@ Written for FPGA class to quickly tinker with object buffer to pass to HDMI.
 3. open `display.html` from `impl` folder in your browser, load `rgb.txt` data and hit `show screen` button.
 
 ### Using GHDL
+
+NOTE: Windows support is not added yet.
 
 0. Install GHDL and add it to your path.
 1. run `make` to check VHDL syntax in your code
