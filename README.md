@@ -1,6 +1,6 @@
 # vhdl-display-simulator
 
-Screen Display Simulator written in VHDL and JS. Generates RGB pixel data from VHDL simulation and displays the pixels on the browser. Currently only supports 720p resolution (1280x720). 
+Screen Display Simulator written in VHDL and JS. Generates RGB pixel data from VHDL simulation and displays the pixels on the browser. Currently only supports 720p resolution (1280x720) and 24-bit RGB data. 
 
 Written for FPGA class to quickly tinker with object buffer to pass to HDMI.
 Example output for `pattern_generator.vhd` and `objectbuffer.vhd` are shown below.
