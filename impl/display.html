@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Screen Simulator</title>
+</head>
+<body>
+    <h1>Screen Simulator for 1280x720 resolution</h1>
+    <h3>Choose the <i>rgb.txt</i> file that is generated from simulation</h3>
+    <input type="file">
+    <button id="simulate">show screen</button>
+    <br />
+    <br />
+    <canvas id="canvas" width="1280" height="720" style="border:4px solid #000000;"></canvas>
+
+    <script>
+    document.getElementById("simulate").addEventListener("click", function() {
+        var reader = new FileReader();
+            reader.addEventListener('load', function() {
+                draw(this.result);
+            });
+        reader.readAsText(document.querySelector('input').files[0]);
+    });
+
+    function draw(file) {
+      var canvas = document.getElementById('canvas');
+      if (canvas.getContext) {
+        var ctx = canvas.getContext('2d');
+        var x = 0;
+        var y = 0;
+        var r = 0;
+        var g = 0;
+        var b = 0;
+        var lines = file.split('\n');
+        while (y < 720) {
+            line = lines[y].split(',');
+            while (x < 1280) {
+                r = ((line[x]&0xff0000) >> 16);
+                g = ((line[x]&0x00ff00) >> 8);
+                b = (line[x]&0x0000ff);
+                ctx.fillStyle = "rgb("+r+","+g+","+b+")";
+                ctx.fillRect(x, y, 1, 1);
+                x++;
+            }
+            x = 0;
+            y++;
+        }
+      }
+    }
+
+    </script>
+<footer>
+    Furkan Cayci, 2018
+</footer>
+</body>
+</html>
