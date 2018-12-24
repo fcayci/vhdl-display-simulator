@@ -110,7 +110,7 @@ begin
 
     -- record values
     process(clk) is
-        file     DISP_FILE : text is out "debug/rgb.txt";
+        file     DISP_FILE : text is out "rgb.txt";
         variable DISP_LINE : line;
         variable h : std_logic := '0';
     begin

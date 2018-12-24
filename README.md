@@ -12,8 +12,9 @@ Example output for `pattern_generator.vhd` and `objectbuffer.vhd` are shown belo
 ### Using ISIM
 
 1. create a project and import files in the `rtl` directory. 
-2. add the testbench from `sim` directory and run the testbench. `rgb.txt` data should be generated under `debug` folder. This will take a couple seconds and will take around ~10MB space.
-3. open `display.html` from `impl` folder in your browser, load `rgb.txt` data and hit `show screen` button.
+2. add the testbench from `sim` directory and run the testbench for 10 ms.
+3. `rgb.txt` data should be generated under project `sim` folder.
+4. open `display.html` from `impl` folder in your browser, load the generated `rgb.txt` data and hit `show screen` button.
 
 ### Using GHDL
 
