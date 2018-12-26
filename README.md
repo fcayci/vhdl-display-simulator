@@ -22,7 +22,7 @@ NOTE: Windows support is not added yet.
 
 0. Install GHDL and add it to your path.
 1. run `make` to check VHDL syntax in your code
-2. run `make simulate` to create the RGB data. This runs the `tb_display.vhd` testbench for one full frame. It stores pixel color data per clock when in the active video area. Saves in a file called `rgb.txt` stored under `debug` folder. This will take a couple seconds and will take around ~10MB space.
+2. run `make simulate` to create the RGB data. This runs the `tb_display.vhd` testbench for one full frame. It stores pixel color data per clock when in the active video area. Saves in a file called `rgb.txt`. This will take a couple seconds and will take around ~10MB space.
 3. open `display.html` from `impl` folder in your browser, load `rgb.txt` data and hit `show screen` button.
 
 ## Files
@@ -34,7 +34,7 @@ NOTE: Windows support is not added yet.
 | -- pattern_generator.vhd : color spectrum pattern
 | -- objectbuffer.vhd      : generates objects
 +- sim/
-| -- tb_display.vhd            : runs for one full frame, and generates rgb values for each pixel
+| -- tb_display.vhd        : generates rgb values for one frame
 +- impl/
-| -- display.html              : HTML / JS code to display the generated rgb data
+| -- display.html          : HTML / JS code to display the generated rgb data
 ```
