@@ -3,48 +3,41 @@
 #   add ghdl to your PATH for simulation
 
 CC = ghdl
-#SIM = gtkwave
 ARCHNAME = tb_display
 STOPTIME = 100ms
 
-SRCS = $(wildcard rtl/*.vhd)
-#SRCS += $(wildcard impl/*.vhd)
-TBS = $(wildcard sim/tb_*.vhd)
-TB = sim/$(ARCHNAME).vhd
+VHDL_SOURCES = $(wildcard rtl/*.vhd)
+TBS = $(wildcard tb/tb_*.vhd)
+TB = tb/$(ARCHNAME).vhd
 WORKDIR = debug
-GFLAGS = --ieee=synopsys
-
-OBJS = $(patsubst sim/%.vhd, %.bin, $(TBS))
+CFLAGS = --ieee=synopsys
 
 .PHONY: all
 all: check analyze
-	@echo "completed..."
+	@echo ">>> completed..."
 
 .PHONY: check
 check:
-	@echo "checking the syntax for the designs..."
-	@$(CC) -s $(GFLAGS) $(SRCS) $(TBS)
+	@echo ">>> check syntax on all designs..."
+	@$(CC) -s $(CFLAGS) $(VHDL_SOURCES) $(TBS)
 
 .PHONY: analyze
 analyze:
-	@echo "analyzing designs..."
+	@echo ">>> analyzing designs..."
 	@mkdir -p $(WORKDIR)
-	@$(CC) -a --workdir=$(WORKDIR) $(GFLAGS) $(SRCS) $(TBS)
+	@$(CC) -a --workdir=$(WORKDIR) $(CFLAGS) $(VHDL_SOURCES) $(TBS)
 
 .PHONY: simulate
 simulate: clean analyze
-	@echo "creating rgb file for:" $(TB)
-	@$(CC) --elab-run --workdir=$(WORKDIR) $(GFLAGS) -o $(WORKDIR)/$(ARCHNAME).bin $(ARCHNAME) --stop-time=$(STOPTIME)
-
-# .PHONY: simulate
-# simulate: clean analyze
-# 	@echo "simulating design:" $(TB)
-# 	@$(CC) --elab-run --workdir=$(WORKDIR) $(GFLAGS) -o $(WORKDIR)/$(ARCHNAME).bin $(ARCHNAME) --vcd=$(WORKDIR)/$(ARCHNAME).vcd --stop-time=$(STOPTIME)
-# 	@$(SIM) $(WORKDIR)/$(ARCHNAME).vcd
+	@echo ">>> creating rgb file for:" $(TB)
+	@$(CC) --elab-run --workdir=$(WORKDIR) $(CFLAGS) \
+		-o $(WORKDIR)/$(ARCHNAME).bin $(ARCHNAME) \
+		--stop-time=$(STOPTIME)
 
 .PHONY: clean
 clean:
-	@echo "cleaning design..."
+	@echo ">>> cleaning design..."
 	@ghdl --remove --workdir=$(WORKDIR)
 	@rm -f $(WORKDIR)/*
 	@rm -rf $(WORKDIR)
+	@echo ">>> done..."

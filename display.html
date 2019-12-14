@@ -1,18 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Screen Simulator</title>
+    <title>Display Simulator</title>
 </head>
 <body>
-    <h1>Screen Simulator for 1280x720 resolution</h1>
+    <h1>Display Simulator</h1>
     <h3>Choose the <i>rgb.txt</i> file that is generated from simulation</h3>
     <input type="file">
-    <button id="simulate">show screen</button>
+    Choose resolution:
+    <select id="res">
+        <option value="1280x720">1280x720</option>
+        <option value="800x600">800x600</option>
+        <option value="640x480">640x480</option>
+    </select>
+    <button id="simulate">Render screen</button>
     <br />
     <br />
-    <canvas id="canvas" width="1280" height="720" style="border:4px solid #000000;"></canvas>
+    <canvas id="canvas" style="border:4px solid #000000;"></canvas>
 
     <script>
+    var resolution = document.getElementById('res');
     document.getElementById("simulate").addEventListener("click", function() {
         var reader = new FileReader();
             reader.addEventListener('load', function() {
@@ -21,8 +28,24 @@
         reader.readAsText(document.querySelector('input').files[0]);
     });
 
+    function getSelectedOption(sel) {
+        var opt;
+        for ( var i = 0, len = sel.options.length; i < len; i++ ) {
+            opt = sel.options[i];
+            if ( opt.selected === true ) {
+                break;
+            }
+        }
+        return opt;
+    }
+
     function draw(file) {
+      var opt = getSelectedOption(resolution);
+      var res = opt.value.split("x");
+
       var canvas = document.getElementById('canvas');
+      canvas.width = Number(res[0]);
+      canvas.height = Number(res[1]);
       if (canvas.getContext) {
         var ctx = canvas.getContext('2d');
         var x = 0;
@@ -31,9 +54,11 @@
         var g = 0;
         var b = 0;
         var lines = file.split('\n');
-        while (y < 720) {
+
+
+        while (y < Number(res[1])) {
             line = lines[y].split(',');
-            while (x < 1280) {
+            while (x < Number(res[0])) {
                 r = ((line[x]&0xff0000) >> 16);
                 g = ((line[x]&0x00ff00) >> 8);
                 b = (line[x]&0x0000ff);
@@ -49,7 +74,7 @@
 
     </script>
 <footer>
-    Furkan Cayci, 2018
+    Furkan Çaycı, 2018
 </footer>
 </body>
 </html>

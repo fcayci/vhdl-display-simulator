@@ -10,9 +10,7 @@ use ieee.numeric_std.all;
 entity objectbuffer is
     generic (
         OBJECT_SIZE : natural := 16;
-        PIXEL_SIZE : natural := 24;
-        RES_X : natural := 1280;
-        RES_Y : natural := 720
+        PIXEL_SIZE : natural := 24
     );
     port (
         video_active       : in  std_logic;

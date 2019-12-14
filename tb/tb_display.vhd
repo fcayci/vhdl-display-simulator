@@ -1,7 +1,7 @@
 -- author: Furkan Cayci, 2018
 -- description: display testbench
 --   generates a txt file to display on html canvas
---   only supports 720p resolution (1280x720) with 24-bit RGB values
+--   only supports 24-bit RGB values
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -13,47 +13,8 @@ entity tb_display is
 end tb_display;
 
 architecture rtl of tb_display is
-    component timing_generator is
-    generic (
-        RESOLUTION   : string  := "HD720P";
-        GEN_PIX_LOC  : boolean := true;
-        OBJECT_SIZE  : natural := 16
-    );
-    port(
-        clk           : in  std_logic;
-        hsync, vsync  : out std_logic;
-        video_active  : out std_logic;
-        pixel_x       : out std_logic_vector(OBJECT_SIZE-1 downto 0);
-        pixel_y       : out std_logic_vector(OBJECT_SIZE-1 downto 0)
-    );
-    end component;
 
-    component pattern_generator is
-    port(
-        clk          : in  std_logic;
-        video_active : in  std_logic;
-        rgb          : out std_logic_vector(23 downto 0)
-    );
-    end component;
-
-    component objectbuffer is
-    generic (
-        OBJECT_SIZE : natural := 16;
-        PIXEL_SIZE : natural := 24;
-        RES_X : natural := 1280;
-        RES_Y : natural := 720
-    );
-    port (
-        video_active       : in  std_logic;
-        pixel_x, pixel_y   : in  std_logic_vector(OBJECT_SIZE-1 downto 0);
-        object1x, object1y : in  std_logic_vector(OBJECT_SIZE-1 downto 0);
-        object2x, object2y : in  std_logic_vector(OBJECT_SIZE-1 downto 0);
-        backgrnd_rgb       : in  std_logic_vector(PIXEL_SIZE-1 downto 0);
-        rgb                : out std_logic_vector(PIXEL_SIZE-1 downto 0)
-    );
-    end component;
-
-    constant RESOLUTION : string := "HD720P";
+    constant RESOLUTION : string := "HD720P"; -- HD720P, SVGA, VGA
     constant GEN_PIX_LOC : boolean := true;
     constant OBJECT_SIZE : natural := 16;
     constant PIXEL_SIZE : natural := 24;
@@ -64,7 +25,7 @@ architecture rtl of tb_display is
     signal clk          : std_logic;
     signal hsync, vsync : std_logic;
     signal video_active : std_logic;
-    signal rgb          : std_logic_vector(23 downto 0);
+    signal rgb          : std_logic_vector(PIXEL_SIZE-1 downto 0);
     signal pixel_x      : std_logic_vector(OBJECT_SIZE-1 downto 0);
     signal pixel_y      : std_logic_vector(OBJECT_SIZE-1 downto 0);
 
@@ -78,17 +39,18 @@ architecture rtl of tb_display is
 begin
 
     -- timing generator
-    uut0 : timing_generator
+    u_t : entity work.timing_generator(rtl)
         generic map (RESOLUTION=>RESOLUTION, GEN_PIX_LOC=>GEN_PIX_LOC,
                      OBJECT_SIZE=>OBJECT_SIZE)
         port map (clk=>clk, hsync=>hsync, vsync=>vsync, video_active=>video_active,
                   pixel_x=>pixel_x, pixel_y=>pixel_y);
 
-    -- pattern generator
-    -- uut1 : pattern_generator
+    -- connect pattern generator
+    -- uut0 : entity work.pattern_generator(rtl)
     --     port map(clk=>clk, video_active=>video_active, rgb=>rgb);
 
-    uut2 : objectbuffer
+    -- connect object buffer
+    uut0 : entity work.objectbuffer(rtl)
         generic map (OBJECT_SIZE=>OBJECT_SIZE, PIXEL_SIZE=>PIXEL_SIZE)
         port map (video_active=>video_active, pixel_x=>pixel_x, pixel_y=>pixel_y,
                   object1x=>object1x, object1y=>object1y,
@@ -121,13 +83,15 @@ begin
                 h := '1';
             end if;
 
+            -- Note that in VGA hsync polarity should be reversed
             if hsync = '1' and h = '1' then
                 h := '0';
                 writeline(DISP_FILE, DISP_LINE);
             end if;
 
+            -- Note that in VGA vsync polarity should be reversed
             if vsync = '1' then
-                assert true report "completed..." severity note;
+                assert false report "completed...ignore following error messages" severity FAILURE;
             end if;
         end if;
     end process;
