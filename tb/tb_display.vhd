@@ -72,7 +72,7 @@ begin
 
     -- record values
     process(clk) is
-        file     DISP_FILE : text is out "rgb.txt";
+        file     DISP_FILE : text open write_mode is "rgb.txt";
         variable DISP_LINE : line;
         variable h : std_logic := '0';
     begin
