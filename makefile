@@ -6,11 +6,18 @@ CC = ghdl
 ARCHNAME = tb_display
 STOPTIME = 100ms
 
-VHDL_SOURCES = $(wildcard rtl/*.vhd)
-TBS = $(wildcard tb/tb_*.vhd)
+VHDL_SOURCES = rtl/vga_timing_pkg.vhd
+VHDL_SOURCES += rtl/timing_generator.vhd
+VHDL_SOURCES += rtl/objectbuffer.vhd
+VHDL_SOURCES += rtl/pattern_generator.vhd
+
 TB = tb/$(ARCHNAME).vhd
 WORKDIR = debug
+
 CFLAGS = --ieee=synopsys
+CFLAGS += --std=08 # enable ieee 2008 standard
+CFLAGS += --warn-binding
+CFLAGS += --warn-no-library # turn off warning on design replace with same name
 
 .PHONY: all
 all: check analyze
@@ -19,13 +26,13 @@ all: check analyze
 .PHONY: check
 check:
 	@echo ">>> check syntax on all designs..."
-	@$(CC) -s $(CFLAGS) $(VHDL_SOURCES) $(TBS)
+	@$(CC) -s $(CFLAGS) $(VHDL_SOURCES) $(TB)
 
 .PHONY: analyze
 analyze:
 	@echo ">>> analyzing designs..."
 	@mkdir -p $(WORKDIR)
-	@$(CC) -a --workdir=$(WORKDIR) $(CFLAGS) $(VHDL_SOURCES) $(TBS)
+	@$(CC) -a --workdir=$(WORKDIR) $(CFLAGS) $(VHDL_SOURCES) $(TB)
 
 .PHONY: simulate
 simulate: clean analyze
