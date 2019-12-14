@@ -38,7 +38,7 @@ architecture rtl of objectbuffer is
 
     -- 2nd object is a ball
     constant BALL_SIZE: integer:=8;
-    type rom_type is array (0 to 7) of std_logic_vector(7 downto 0);
+    type rom_type is array (0 to 7) of std_logic_vector(0 to 7);
 
     constant BALL_ROM: rom_type := (
        "00111100", --   ****
