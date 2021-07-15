@@ -38,8 +38,7 @@ analyze:
 simulate: clean analyze
 	@echo ">>> creating rgb file for:" $(TB)
 	@$(CC) --elab-run --workdir=$(WORKDIR) $(CFLAGS) \
-		-o $(WORKDIR)/$(ARCHNAME).bin $(ARCHNAME) \
-		--stop-time=$(STOPTIME)
+		$(ARCHNAME) --stop-time=$(STOPTIME)
 
 .PHONY: clean
 clean:
@@ -48,3 +47,4 @@ clean:
 	@rm -f $(WORKDIR)/*
 	@rm -rf $(WORKDIR)
 	@echo ">>> done..."
+
